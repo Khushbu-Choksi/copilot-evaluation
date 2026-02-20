@@ -1,0 +1,150 @@
+<div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 16px;">
+  <button (click)="onAddTaskClick()" class="action-btn add-btn">Add Task</button>
+</div>
+
+<div *ngIf="showForm" style="margin-bottom: 16px;">
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmitTask()" style="display: flex; gap: 12px; align-items: flex-end;">
+    <div>
+      <label>Title</label><br>
+      <input formControlName="title" placeholder="Title" />
+      <div *ngIf="taskForm.get('title')?.invalid && (taskForm.get('title')?.touched || taskForm.get('title')?.dirty)" style="color: red; font-size: 12px;">
+        Title is required.
+      </div>
+    </div>
+    <div>
+      <label>Description</label><br>
+      <input formControlName="description" placeholder="Description" />
+      <div *ngIf="taskForm.get('description')?.invalid && (taskForm.get('description')?.touched || taskForm.get('description')?.dirty)" style="color: red; font-size: 12px;">
+        Description is required.
+      </div>
+    </div>
+    <div>
+      <label>Status</label><br>
+      <input formControlName="status" placeholder="Status" />
+      <div *ngIf="taskForm.get('status')?.invalid && (taskForm.get('status')?.touched || taskForm.get('status')?.dirty)" style="color: red; font-size: 12px;">
+        Status is required.
+      </div>
+    </div>
+    <div>
+      <label>Priority</label><br>
+      <select formControlName="priority">
+        <option value="">Select Priority</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <div *ngIf="taskForm.get('priority')?.invalid && (taskForm.get('priority')?.touched || taskForm.get('priority')?.dirty)" style="color: red; font-size: 12px;">
+        Priority is required.
+      </div>
+    </div>
+    <div>
+      <label>Due Date</label><br>
+      <input type="date" formControlName="dueDate" />
+      <div *ngIf="taskForm.get('dueDate')?.invalid && (taskForm.get('dueDate')?.touched || taskForm.get('dueDate')?.dirty)" style="color: red; font-size: 12px;">
+        Due Date is required.
+      </div>
+    </div>
+    <div *ngIf="taskForm.errors?.['priorityDueDate']" style="color: red; font-size: 12px;">
+      If due date is within 7 days, priority must be High.
+    </div>
+    <button type="submit" [disabled]="taskForm.invalid">Submit</button>
+    <div *ngIf="errorMessage" style="color: red; margin-top: 8px;">{{ errorMessage }}</div>
+  </form>
+</div>
+
+<div *ngIf="isLoading" style="color: #1976d2; margin-bottom: 16px; font-weight: bold;">...Loading...</div>
+<div *ngIf="showMessage" style="color: green; margin-bottom: 16px;">Task added successfully!</div>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th (click)="sortByDueDate()" style="cursor:pointer; user-select:none;">
+        Due Date
+        <span *ngIf="dueDateSortAsc">▲</span><span *ngIf="!dueDateSortAsc">▼</span>
+      </th>
+      <th>Priority</th>
+      <th>Created At</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="tasks.length === 0">
+      <td colspan="5" style="text-align:center; color: #888;">No Tasks</td>
+    </tr>
+    <tr *ngFor="let task of tasks" 
+      appDraggableTask 
+      [task]="task" 
+      [tasks]="tasks" 
+      (reorder)="onReorderTasks($event)"
+      style="background: #f9f9f9; border-bottom: 1px solid #eee;">
+      <td style="font-weight: bold; color: #333;">{{ task.title }}</td>
+      <td style="color: #555;">{{ task.description }}</td>
+      <td>
+        <span [ngClass]="{
+          'status-open': task.status === 'Open',
+          'status-inprogress': task.status === 'In progress',
+          'status-done': task.status === 'Done'
+        }">
+          {{ task.status }}
+        </span>
+      </td>
+      <td>{{ task.dueDate | date:'yyyy-MM-dd' }}</td>
+      <td>{{ task.priority }}</td>
+      <td>{{ task.createdAt | date:'medium' }}</td>
+      <td>
+        <button (click)="onEditTask(task)" class="action-btn edit-btn">Edit</button>
+      </td>
+    </tr>
+  <style>
+  .action-btn {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+    transition: background 0.2s;
+  }
+  .action-btn:hover {
+    background: #1565c0;
+  }
+  .add-btn {
+    background: #43a047;
+  }
+  .add-btn:hover {
+    background: #388e3c;
+  }
+  .edit-btn {
+    background: #1976d2;
+  }
+  .edit-btn:hover {
+    background: #1565c0;
+  }
+  .status-open {
+    background: #ffebee;
+    color: #d32f2f;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  .status-inprogress {
+    background: #fff9c4;
+    color: #ffd600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  .status-done {
+    background: #e8f5e9;
+    color: #388e3c;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  </style>
+  </tbody>
+</table>

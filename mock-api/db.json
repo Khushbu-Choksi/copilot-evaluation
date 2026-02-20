@@ -1,7 +1,39 @@
 {
   "tasks": [
     {
+      "title": "Task2",
+      "description": "Task 2 desc",
+      "status": "Done",
+      "priority": "High",
+      "dueDate": "2026-02-21",
       "id": "1"
+    },
+    {
+      "title": "Task1",
+      "description": "Task Desc",
+      "status": "In progress",
+      "priority": "High",
+      "dueDate": "2026-02-25",
+      "createdAt": "2026-02-20T10:27:07.608Z",
+      "id": "D6s1ur6"
+    },
+    {
+      "title": "Task 3",
+      "description": "Task 3 updated ",
+      "status": "Open",
+      "priority": "Low",
+      "dueDate": "2026-02-28",
+      "createdAt": "2026-02-20T10:32:35.408Z",
+      "id": "vGLqJL0"
+    },
+    {
+      "title": "test 3",
+      "description": "fhgfhg",
+      "status": "Open",
+      "priority": "Low",
+      "dueDate": "2026-02-28",
+      "createdAt": "2026-02-20T11:12:17.387Z",
+      "id": "IZ6e2YB"
     }
   ]
 }
